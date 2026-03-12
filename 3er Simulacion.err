@@ -1,0 +1,11 @@
+Compiling C:\Users\ghers\OneDrive\Documents\Ingenieria\Residencias\Codigo\16F887\3er Simulacion\3er Simulacion on 10-feb.-26 at 22:40
+>>> Warning 203 "C:\Users\ghers\OneDrive\Documents\Ingenieria\Residencias\Codigo\16F887\3er Simulacion\DS3232.c" Line 106(1,1): Condition always TRUE
+>>> Warning 225 "C:\Program Files (x86)\PICC\Drivers\HDM64GS12.c" Line 141(18,26): Duplicate #define
+>>> Warning 225 "C:\Program Files (x86)\PICC\Drivers\HDM64GS12.c" Line 142(19,26): Duplicate #define
+>>> Warning 242 "C:\Program Files (x86)\PICC\Drivers\GRAPHICS.c" Line 524(21,22): May be missing a break
+>>> Warning 205 "C:\Users\ghers\OneDrive\Documents\Ingenieria\Residencias\Codigo\16F887\3er Simulacion\3er Simulacion.c" Line 226(1,1): Unsigned variable is never less than zero
+>>> Warning 204 "C:\Users\ghers\OneDrive\Documents\Ingenieria\Residencias\Codigo\16F887\3er Simulacion\3er Simulacion.c" Line 226(1,1): Condition always FALSE
+>>> Warning 202 "C:\Users\ghers\OneDrive\Documents\Ingenieria\Residencias\Codigo\16F887\3er Simulacion\3er Simulacion.c" Line 67(9,12): Variable never used:   txt
+      Memory usage:   ROM=39%      RAM=42% - 59%
+      0 Errors,  7 Warnings.
+Build Successful.

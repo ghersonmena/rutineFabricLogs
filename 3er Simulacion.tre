@@ -1,0 +1,141 @@
+ÀÄ3er Simulacion
+   ÀÄMAIN  1/482  Ram=0
+      ÃÄ@cinit1  (Inline)  Ram=0
+      ÃÄ@cinit2  (Inline)  Ram=0
+      ÃÄglcd_init  0/99  Ram=1
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ÀÄglcd_fillScreen  0/90  Ram=4
+      ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³     ÃÄ@MUL88  0/39  Ram=2
+      ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³     ÃÄ@MUL88  0/39  Ram=2
+      ³     ÀÄglcd_writeByte  0/55  Ram=2
+      ÃÄglcd_fillScreen  0/90  Ram=4
+      ³  ÀÄ*
+      ÃÄpantalla_carga  0/278  Ram=2
+      ³  ÃÄglcd_fillScreen  0/90  Ram=4
+      ³  ³  ÀÄ*
+      ³  ÃÄglcd_text57  0/248  Ram=20
+      ³  ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ³  ÃÄ@const866  0/262  Ram=0
+      ³  ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ³  ÃÄ@const870  0/224  Ram=0
+      ³  ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ³  ÀÄglcd_pixel  0/134  Ram=7
+      ³  ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ³     ÃÄglcd_readByte  0/57  Ram=2
+      ³  ³     ÃÄglcd_readByte  0/57  Ram=2
+      ³  ³     ÃÄglcd_writeByte  0/55  Ram=2
+      ³  ³     ÀÄglcd_writeByte  0/55  Ram=2
+      ³  ÃÄglcd_rect  (Inline)  Ram=11
+      ³  ³  ÃÄglcd_pixel  0/134  Ram=7
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄglcd_line  0/184  Ram=17
+      ³  ³  ³  ÃÄglcd_pixel  0/134  Ram=7
+      ³  ³  ³  ³  ÀÄ*
+      ³  ³  ³  ÀÄglcd_pixel  0/134  Ram=7
+      ³  ³  ³     ÀÄ*
+      ³  ³  ÃÄglcd_line  0/184  Ram=17
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄglcd_line  0/184  Ram=17
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÀÄglcd_line  0/184  Ram=17
+      ³  ³     ÀÄ*
+      ³  ÃÄ@delay_ms1  0/20  Ram=1
+      ³  ÀÄglcd_fillScreen  0/90  Ram=4
+      ³     ÀÄ*
+      ÃÄ@delay_ms1  0/20  Ram=1
+      ÃÄguardar_evento  1/380  Ram=35
+      ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ÃÄds3232_get_date  (Inline)  Ram=9
+      ³  ³  ÃÄ@I2C_WRITEU_129  0/18  Ram=1
+      ³  ³  ÃÄ@I2C_WRITEU_129  0/18  Ram=1
+      ³  ³  ÃÄ@I2C_WRITEU_129  0/18  Ram=1
+      ³  ³  ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³  ³  ÃÄbcd2bin  0/21  Ram=3
+      ³  ³  ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³  ³  ÃÄbcd2bin  0/21  Ram=3
+      ³  ³  ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³  ³  ÃÄbcd2bin  0/21  Ram=3
+      ³  ³  ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³  ³  ÀÄbcd2bin  0/21  Ram=3
+      ³  ÀÄds3232_get_time  (Inline)  Ram=7
+      ³     ÃÄ@I2C_WRITEU_129  0/18  Ram=1
+      ³     ÃÄ@I2C_WRITEU_129  0/18  Ram=1
+      ³     ÃÄ@I2C_WRITEU_129  0/18  Ram=1
+      ³     ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³     ÃÄbcd2bin  0/21  Ram=3
+      ³     ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³     ÃÄbcd2bin  0/21  Ram=3
+      ³     ÃÄ@I2C_READU_129  0/16  Ram=1
+      ³     ÀÄbcd2bin  0/21  Ram=3
+      ÃÄmenu_principal  0/46  Ram=0
+      ³  ÃÄglcd_fillScreen  0/90  Ram=4
+      ³  ³  ÀÄ*
+      ³  ÃÄglcd_text57  0/248  Ram=20
+      ³  ³  ÀÄ*
+      ³  ÃÄglcd_text57  0/248  Ram=20
+      ³  ³  ÀÄ*
+      ³  ÀÄglcd_text57  0/248  Ram=20
+      ³     ÀÄ*
+      ÃÄglcd_fillScreen  0/90  Ram=4
+      ³  ÀÄ*
+      ÃÄglcd_text57  0/248  Ram=20
+      ³  ÀÄ*
+      ÃÄmostrar_evento  1/349  Ram=40
+      ³  ÃÄglcd_fillScreen  0/90  Ram=4
+      ³  ³  ÀÄ*
+      ³  ÃÄglcd_text57  0/248  Ram=20
+      ³  ³  ÀÄ*
+      ³  ÃÄ@MUL88  0/39  Ram=2
+      ³  ÃÄglcd_fillScreen  0/90  Ram=4
+      ³  ³  ÀÄ*
+      ³  ÃÄglcd_text57  0/248  Ram=20
+      ³  ³  ÀÄ*
+      ³  ÃÄ@PRINTF_U_974  0/63  Ram=2
+      ³  ³  ÃÄ@DIV88  0/23  Ram=3
+      ³  ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ³  ÃÄ@DIV88  0/23  Ram=3
+      ³  ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ³  ÀÄ@SPRINTF  0/15  Ram=1
+      ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ÃÄ@PRINTF_U_974  0/63  Ram=2
+      ³  ³  ÀÄ*
+      ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ÃÄ@PRINTF_U_974  0/63  Ram=2
+      ³  ³  ÀÄ*
+      ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ÃÄ@PRINTF_U_974  0/63  Ram=2
+      ³  ³  ÀÄ*
+      ³  ÃÄglcd_text57  0/248  Ram=20
+      ³  ³  ÀÄ*
+      ³  ÃÄ@PSTRINGCN7_974  (Inline)  Ram=5
+      ³  ³  ÃÄ@SPRINTF  0/15  Ram=1
+      ³  ³  ÀÄ@SPRINTF  0/15  Ram=1
+      ³  ÃÄ@PRINTF_U_974  0/63  Ram=2
+      ³  ³  ÀÄ*
+      ³  ÀÄglcd_text57  0/248  Ram=20
+      ³     ÀÄ*
+      ÃÄejecutar_eventos  0/83  Ram=0
+      ÃÄapagar_actuadores  0/33  Ram=0
+      ÃÄmostrar_evento  1/349  Ram=40
+      ³  ÀÄ*
+      ÀÄmostrar_evento  1/349  Ram=40
+         ÀÄ*

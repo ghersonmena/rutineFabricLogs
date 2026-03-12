@@ -1,0 +1,306 @@
+#include <16F887.h>
+#include <string.h>
+#include <stdio.h>
+#fuses HS,NOWDT,NOPROTECT,NOPUT,NOLVP,NOBROWNOUT 
+#use delay(clock=20M)
+#define RTC_SDA  PIN_C4
+#define RTC_SCL  PIN_C3
+#use i2c(MASTER, SDA=PIN_C4, SCL=PIN_C3)
+
+//!#use I2C(MASTER, SDA=PIN_C4, SCL=PIN_C3, I2C1, FAST = 100000, stream = SSD1306_STREAM)
+
+#include <DS3232.c>
+int8 dia, mes, an, dow;
+int8 hora, min, seg;
+// ================= GLCD =================
+#define GLCD_WIDTH 128
+#define GLCD_CS1 PIN_B0
+#define GLCD_CS2 PIN_B1
+#define GLCD_DI  PIN_B2
+#define GLCD_RW  PIN_B3
+#define GLCD_E   PIN_B4
+#define GLCD_RST PIN_B5
+#define xOffSet 25
+#define GLCD_LEFT  1
+#define GLCD_RIGHT 0
+
+#include <HDM64GS12.c>
+#include <GRAPHICS.c>
+
+// ================= BOTONES =================
+#define BTN1 input(PIN_A0)
+#define BTN2 input(PIN_A1)
+#define BTN3 input(PIN_A2)
+#define BTN4 input(PIN_A3)
+#define BTN5 input(PIN_C6)
+#define BTN6 input(PIN_C7)
+
+// ================= ACTUADORES =================
+#define ACT1 PIN_C0
+#define ACT2 PIN_C1
+#define ACT3 PIN_C2
+#define ACT4 PIN_E0
+#define ACT5 PIN_E1
+#define ACT6 PIN_E2
+
+// ================= ESTADOS =================
+#define BOOT     0
+#define MENU     1
+#define RUN      2
+#define VIEW_LOG 3
+
+int estado = BOOT;
+int menu_drawn = 0;
+
+// ================= VARIABLES =================
+int event_count = 0;
+int view_index  = 0;
+
+// ---- NUEVO ----
+int flag_guardar = 0;
+int evento_pendiente = 0;
+
+// ================= TEXTOS =================
+char txt_boot[]     = "INICIANDO SISTEMA";
+char txt_menu[]     = "MENU PRINCIPAL";
+char txt_start[]    = "1 - INICIAR";
+char txt_logs[]     = "2 - REGISTROS";
+char txt_run[]      = "SISTEMA ACTIVO";
+char txt_registro[] = "REGISTRO EVENTOS";
+char txt_no_logs[]  = "SIN REGISTROS";
+char txt[25];
+// ================= EEPROM =================
+void guardar_evento(int tipo)
+{
+   int addr;
+   char txt[25];
+   if(event_count >= 40) return;
+   addr = 1 + (event_count * 5);
+   ds3232_get_date(dia, mes, an, dow);                         // Obtiene le fecha
+   ds3232_get_time(hora, min, seg); 
+   write_eeprom(addr,   dia);
+   write_eeprom(addr+1, mes);
+   write_eeprom(addr+2, hora);
+   write_eeprom(addr+3, min);
+   write_eeprom(addr+4, tipo);
+   event_count++;
+   write_eeprom(0, event_count);
+   glcd_fillScreen(OFF);
+   glcd_text57(10,0,txt_registro,1,ON);
+
+   sprintf(txt,"%02u/%02u  %02u:%02u",dia,mes,hora,min);
+   glcd_text57(20,25,txt,1,ON);
+}
+
+// ================= PANTALLAS =================
+void pantalla_carga()
+{
+   glcd_fillScreen(OFF);
+   glcd_text57(15,20,txt_boot,1,ON);
+
+   for(int i=0;i<=100;i+=20)
+   {
+      glcd_rect(10,45,10+i,50,1,1);
+      delay_ms(20);
+   }
+
+   glcd_fillScreen(OFF);
+}
+
+void menu_principal()
+{
+   glcd_fillScreen(OFF);
+   glcd_text57(30,10,txt_menu,1,ON);
+   glcd_text57(20,30,txt_start,1,ON);
+   glcd_text57(20,45,txt_logs,1,ON);
+}
+
+// ================= RUN =================
+void ejecutar_eventos()
+{
+   if(BTN4)
+   {
+      output_high(ACT1);
+      output_high(ACT2);
+      evento_pendiente = 4;
+      flag_guardar = 1;
+      while(BTN4);
+   }
+
+   if(BTN5)
+   {
+      output_high(ACT3);
+      output_high(ACT4);
+      evento_pendiente = 5;
+      flag_guardar = 1;
+      while(BTN5);
+   }
+
+   if(BTN6)
+   {
+      output_high(ACT5);
+      output_high(ACT6);
+      evento_pendiente = 6;
+      flag_guardar = 1;
+      while(BTN6);
+   }
+}
+
+// ================= VISOR =================
+void mostrar_evento(int index)
+{
+   int addr;
+   char txt[25];
+
+   if(event_count == 0)
+   {
+      glcd_fillScreen(OFF);
+      glcd_text57(30,30,txt_no_logs,1,ON);
+      return;
+   }
+
+   addr = 1 + (index * 5);
+
+   int d   = read_eeprom(addr);
+   int m   = read_eeprom(addr+1);
+   int h   = read_eeprom(addr+2);
+   int min = read_eeprom(addr+3);
+   int ev  = read_eeprom(addr+4);
+
+   glcd_fillScreen(OFF);
+   glcd_text57(10,0,txt_registro,1,ON);
+
+   sprintf(txt,"%02u/%02u  %02u:%02u",d,m,h,min);
+   glcd_text57(20,25,txt,1,ON);
+
+   sprintf(txt,"EVENTO BTN %u",ev);
+   glcd_text57(20,45,txt,1,ON);
+}
+
+void apagar_actuadores()
+{
+   output_low(ACT1);
+   output_low(ACT2);
+   output_low(ACT3);
+   output_low(ACT4);
+   output_low(ACT5);
+   output_low(ACT6);
+}
+
+// ================= MAIN =================
+void main()
+{
+   set_tris_a(0xFF);
+//!   set_tris_c(0xC0);   // RC6 y RC7 entradas
+//!   set_tris_b(0x00);
+//!   set_tris_d(0x00);
+//!   set_tris_e(0x00);
+//!   output_c(0x00);
+//!   output_d(0x00);
+//!   output_e(0x00);
+   glcd_init(ON);
+   glcd_fillScreen(OFF);
+   delay_ms(10);
+   ds3232_init();
+   ds3232_set_date_time(9,2,27,1,12,20,55); 
+//!   if(read_eeprom(100) != 0xAA){
+//!      ds3232_set_date_time(dia,mes,an,dow,hora,min,seg); // ajusta a lo que quieras
+//!      write_eeprom(100,0xAA);
+//!   }
+   event_count = read_eeprom(0);
+   if(event_count == 255){
+      event_count = 0;
+      write_eeprom(0,0);
+   }
+//!   pantalla_carga();
+//!   estado = MENU;
+
+   while(TRUE)
+   {
+      int8 s;
+      delay_ms(50);
+      ds3232_get_time(hora, min, s);
+      glcd_fillScreen(OFF);
+      sprintf(txt, "SEC=%02u", s);
+      glcd_text57(10,30,txt,1,ON);
+
+//!glcd_fillScreen(OFF);
+//!sprintf(txt, "SEC=%u", s);
+//!glcd_text57(10,30,txt,1,ON);
+//!      ds3232_get_date(dia, mes, an, dow);                         // Obtiene le fecha
+//!      ds3232_get_time(hora, min, seg); 
+//!      glcd_text57(10,0,txt_registro,1,ON);
+//!      sprintf(txt,"%02u/%02u  %02u:%02u",dia,mes,hora,min);
+//!      glcd_text57(20,25,txt,1,ON);
+//!      delay_ms(2000);
+//!      // ======= GUARDADO DIFERIDO =======
+//!      if(flag_guardar)
+//!      {
+//!         guardar_evento(evento_pendiente);
+//!         flag_guardar = 0;
+//!      }
+//!
+//!      switch(estado)
+//!      {
+//!         case MENU:
+//!            if(!menu_drawn)
+//!            {
+//!               menu_principal();
+//!               menu_drawn = 1;
+//!            }
+//!
+//!            if(BTN1)
+//!            {
+//!               glcd_fillScreen(OFF);
+//!               glcd_text57(20,25,txt_run,1,ON);
+//!               estado = RUN;
+//!               menu_drawn = 0;
+//!               while(BTN1);
+//!            }
+//!
+//!            if(BTN2)
+//!            {
+//!               view_index = event_count - 1;
+//!               if(view_index < 0) view_index = 0;
+//!               mostrar_evento(view_index);
+//!               estado = VIEW_LOG;
+//!               menu_drawn = 0;
+//!               while(BTN2);
+//!            }
+//!         break;
+//!
+//!         case RUN:
+//!            ejecutar_eventos();
+//!            if(BTN3)
+//!            {
+//!               estado = MENU;
+//!               apagar_actuadores();
+//!               while(BTN3);
+//!            }
+//!         break;
+//!
+//!         case VIEW_LOG:
+//!            if(BTN1 && view_index < event_count-1)
+//!            {
+//!               view_index++;
+//!               mostrar_evento(view_index);
+//!               while(BTN1);
+//!            }
+//!
+//!            if(BTN2 && view_index > 0)
+//!            {
+//!               view_index--;
+//!               mostrar_evento(view_index);
+//!               while(BTN2);
+//!            }
+//!
+//!            if(BTN3)
+//!            {
+//!               estado = MENU;
+//!               while(BTN3);
+//!            }
+//!         break;
+//!      }
+   }
+}
+
